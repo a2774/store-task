@@ -24,7 +24,7 @@ const LoginForm = () => {
       alert("Login successful!");
       resetForm();
     } catch (error) {
-      alert("Login failed!");
+      alert("Login failed!");  
     }
   };
  
