@@ -1,97 +1,68 @@
 "use client";
+import React, { useState } from 'react';
+import { customerLogin } from '../../../services/APIServices';
 
-import React from "react";
-import { Formik, Form, Field, ErrorMessage } from "formik";
-import { FaEnvelope, FaLock } from "react-icons/fa";
-import * as Yup from "yup";
-import axios from "axios";
-import Link from "next/link";
+function Customerlogin() {
+  const [GeneratedStoreID, setGeneratedStoreID] = useState('');
+  const [StorePassword, setStorePassword] = useState('');
 
-const LoginForm = () => {
-  const initialValues = {
-    email: "",
-    password: "",
-  };
+  const handleLogin = async () => {
+    debugger;
+    const customerdata = {
+      GeneratedStoreID,
+      StorePassword,
+    };
 
-  const validationSchema = Yup.object({
-    email: Yup.string().email("Invalid email").required("Email is required"),
-    password: Yup.string().required("Password is required"),
-  });
-
-  const onSubmit = async (values, { resetForm }) => {
     try {
-      await axios.post("/api/login", values);
-      alert("Login successful!");
-      resetForm();
+      const res = await customerLogin(customerdata);
+      console.log('Login successful:', res);
     } catch (error) {
-      alert("Login failed!");  
+      console.log('error', error);
     }
   };
- 
-  return (
-    <div className="flex flex-col items-center justify-center shadow-2xl min-h-screen">
-      <div className="bg-white p-6 rounded-xl shadow-lg max-w-md mx-auto">
-        <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">
-          🔐 Login
-        </h2>
-        <Formik
-          initialValues={initialValues}
-          validationSchema={validationSchema}
-          onSubmit={onSubmit}
-        >
-          <Form className="space-y-5">
-            {/* Email */}
-            <div className="relative">
-              <FaEnvelope className="absolute left-3 top-3 text-gray-400" />
-              <Field
-                name="email"
-                type="email"
-                placeholder="Email"
-                className="pl-10 pr-4 py-2 w-full border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-              />
-              <ErrorMessage
-                name="email"
-                component="div"
-                className="text-red-500 text-sm mt-1"
-              />
-            </div>
 
-            {/* Password */}
-            <div className="relative">
-              <FaLock className="absolute left-3 top-3 text-gray-400" />
-              <Field
-                name="password"
-                type="password"
-                placeholder="Password"
-                className="pl-10 pr-4 py-2 w-full border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-              />
-              <ErrorMessage
-                name="password"
-                component="div"
-                className="text-red-500 text-sm mt-1"
-              />
-            </div>
+ return (
+  <div className="flex items-center justify-center min-h-screen bg-gray-100">
+    <div className="w-full max-w-sm p-6 bg-white rounded-xl shadow-md">
+      <h1 className="mb-6 text-2xl font-bold text-center text-gray-800">Customer Login</h1>
 
-            {/* Submit Button */}
-            <button
-              type="submit"
-              className="w-full py-2 bg-gradient-to-r from-green-500 to-green-600 text-white font-semibold rounded-lg hover:scale-105 transition"
-            >
-              Login
-            </button>
-          </Form>
-        </Formik>
+      <div className="mb-4">
+        <label htmlFor="store-id" className="block text-sm font-medium text-gray-700 mb-1">
+          Store ID
+        </label>
+        <input
+          id="store-id"
+          value={GeneratedStoreID}
+          onChange={(e) => setGeneratedStoreID(e.target.value)}
+          placeholder="Enter Store ID"
+          className="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+        />
       </div>
 
-      {/* Registration Link */}
-      <p className="mt-4 text-sm text-gray-600">
-        Customer register{" "}
-        <Link href="/customerRegister" className="text-green-600 underline">
-          here
-        </Link>
-      </p>
-    </div>
-  );
-};
+      <div className="mb-6">
+        <label htmlFor="store-password" className="block text-sm font-medium text-gray-700 mb-1">
+          Store Password
+        </label>
+        <input
+          id="store-password"
+          value={StorePassword}
+          onChange={(e) => setStorePassword(e.target.value)}
+          type="password"
+          placeholder="Enter Password"
+          className="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+        />
+      </div>
 
-export default LoginForm;
+      <button
+        onClick={handleLogin}
+        className="w-full py-2 text-white bg-blue-600 rounded-lg shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1"
+      >
+        Customer Login
+      </button>
+    </div>
+  </div>
+);
+
+}
+
+export default Customerlogin;

@@ -1,48 +1,75 @@
-'use client';
-import React from "react";
-import Link from "next/link";
+"use client";
+import React, { useState } from 'react';
+import { customerLogin } from '../services/APIServices';
+import Link from 'next/link';
 
-const HomePage = () => {
-  return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-100 to-purple-50">
-      <div className="bg-white p-8 rounded-xl shadow-lg max-w-4xl w-full">
-        <h1 className="text-3xl font-bold text-center text-gray-800 mb-8">
-          Welcome to Our Platform
-        </h1>
-        <p className="text-center text-gray-600 mb-12">
-          Please select your login portal below:
-        </p>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div className="flex flex-col items-center p-4 bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
-            <h2 className="text-xl font-semibold text-blue-800 mb-4">Admin Portal</h2>
-            <p className="text-gray-600 text-center mb-6">
-              Access the admin dashboard to manage stores, customers, and more.
-            </p>
-            <Link
-              href="/adminLogin"
-              className="py-3 px-6 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-semibold rounded-lg shadow hover:from-blue-600 hover:to-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
-            >
-              Admin Login
-            </Link>
-          </div>
+function Customerlogin() {
+  const [GeneratedStoreID, setGeneratedStoreID] = useState('');
+  const [StorePassword, setStorePassword] = useState('');
 
-          <div className="flex flex-col items-center p-4 bg-gradient-to-br from-green-50 to-green-100 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
-            <h2 className="text-xl font-semibold text-green-800 mb-4">Customer Portal</h2>
-            <p className="text-gray-600 text-center mb-6">
-              Access your customer account to view stores, make purchases, and more.
-            </p>
-            <Link
-              href="/customerLogin"
-              className="py-3 px-6 bg-gradient-to-r from-green-500 to-green-600 text-white font-semibold rounded-lg shadow hover:from-green-600 hover:to-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50"
-            >
-              Customer Login
-            </Link>
-          </div>
-        </div>
+  const handleLogin = async () => {
+    debugger;
+    const customerdata = {
+      GeneratedStoreID,
+      StorePassword,
+    };
+
+    try {
+      const res = await customerLogin(customerdata);
+      console.log('Login successful:', res);
+    } catch (error) {
+      console.log('error', error);
+    }
+  };
+
+ return (
+  <div className="flex items-center justify-center min-h-screen bg-gray-100">
+    <div className="w-full max-w-sm p-6 bg-white rounded-xl shadow-md">
+      <h1 className="mb-6 text-2xl font-bold text-center text-gray-800">Customer Login</h1>
+
+      <div className="mb-4">
+        <label htmlFor="store-id" className="block text-sm font-medium text-gray-700 mb-1">
+          Store ID
+        </label>
+        <input
+          id="store-id"
+          value={GeneratedStoreID}
+          onChange={(e) => setGeneratedStoreID(e.target.value)}
+          placeholder="Enter Store ID"
+          className="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+        />
       </div>
-    </div>
-  );
-};
 
-export default HomePage;
+      <div className="mb-6">
+        <label htmlFor="store-password" className="block text-sm font-medium text-gray-700 mb-1">
+          Store Password
+        </label>
+        <input
+          id="store-password"
+          value={StorePassword}
+          onChange={(e) => setStorePassword(e.target.value)}
+          type="password"
+          placeholder="Enter Password"
+          className="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+        />
+      </div>
+
+      {/* <button
+        onClick={handleLogin}
+        className="w-full py-2 text-white bg-blue-600 rounded-lg shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1"
+      >
+        Customer Login
+      </button> */}
+      <Link
+
+      href={'/store/readCustomer'}
+      className="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+      >Sign in</Link>
+    </div>
+  </div>
+);
+
+}
+
+export default Customerlogin;
